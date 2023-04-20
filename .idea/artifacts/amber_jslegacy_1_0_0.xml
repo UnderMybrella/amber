@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="amber-jslegacy-1.0.0">
+    <output-path>$PROJECT_DIR$/build/libs</output-path>
+    <root id="archive" name="amber-jslegacy-1.0.0.jar">
+      <element id="module-output" name="amber.jsMain" />
+    </root>
+  </artifact>
+</component>
