@@ -9,8 +9,14 @@ public interface KotlinAppendable<SELF : KotlinAppendable<SELF>> : SelfAppendabl
     public fun appendAutoSpaced(value: Char): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(value).append(it) }
 
+    public fun appendAutoSpacedSurround(value: Char): SELF =
+        settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value).append(it) }
+
     public fun appendAutoSpaced(value: CharSequence?): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(value).append(it) }
+
+    public fun appendAutoSpacedSurround(value: CharSequence?): SELF =
+        settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value).append(it) }
 
     public fun appendAutoSeparated(value: CharSequence?): SELF =
         settings.autoSeparator.let { if (it == null) append(value) else append(value).append(it) }

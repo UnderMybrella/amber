@@ -15,7 +15,7 @@ public inline infix operator fun <SELF : KotlinCommaSeparatedAppendable<*>> SELF
 }
 
 @KotlinStringDsl
-public inline infix fun <SELF : KotlinCommaSeparatedAppendable<*>> SELF.and(block: SELF.() -> Unit): SELF {
+public inline infix fun <SELF : KotlinCommaSeparatedAppendable<*>> SELF.then(block: SELF.() -> Unit): SELF {
     appendCommaSeparator()
     this.block()
     return this

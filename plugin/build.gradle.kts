@@ -27,7 +27,6 @@ java {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-//        freeCompilerArgs += listOf("-Xcontext-receivers")
     }
 }
 
@@ -40,7 +39,8 @@ repositories {
 dependencies {
     api(project(":amber-common"))
     api(project(":amber-kotlin"))
-    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.10")
+    compileOnly("org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.8.10")
+//    compileOnly("com.diffplug.spotless:spotless-plugin-gradle:6.18.0")
     if (enableDokka) dokkaHtmlPlugin("org.jetbrains.dokka:javadoc-plugin:1.8.10")
 }
 

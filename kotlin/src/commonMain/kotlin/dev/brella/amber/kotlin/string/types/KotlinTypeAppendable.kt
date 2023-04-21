@@ -2,22 +2,23 @@ package dev.brella.amber.kotlin.string.types
 
 import dev.brella.amber.kotlin.KotlinAppendable
 import dev.brella.amber.kotlin.KotlinStringDsl
-import dev.brella.amber.kotlin.string.classes.KotlinTypeParameterAppendable
 import dev.brella.amber.kotlin.string.modifiers.KotlinTypeModifierAppendable
 
 public interface KotlinTypeAppendableAccessor {
-    public val types: KotlinTypeAppendable<*>
+    public val type: KotlinTypeAppendable<*>
 }
 
 @KotlinStringDsl
 public inline fun <SELF : KotlinTypeAppendableAccessor> SELF.type(block: KotlinTypeAppendable<*>.() -> Unit): SELF {
-    types.block()
+    type.block()
     return this
 }
 
 public interface KotlinTypeAppendable<SELF : KotlinTypeAppendable<SELF>> : KotlinAppendable<SELF>,
-    KotlinTypeModifierAppendable<SELF>, KotlinFunctionTypeAppendable<SELF>, KotlinTypeAppendableAccessor {
-    override val types: KotlinTypeAppendable<*>
+    KotlinTypeModifierAppendable<SELF>, KotlinFunctionTypeAppendable<SELF>, KotlinParenthesisedTypeAppendable<SELF>,
+    KotlinNullableTypeAppendable<SELF>, KotlinTypeReferenceAppendable<SELF>, KotlinIntersectionTypeAppendable<SELF>,
+    KotlinTypeAppendableAccessor {
+    override val type: KotlinTypeAppendable<*>
         get() = this
 }
 

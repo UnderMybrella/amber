@@ -1,22 +1,19 @@
 package dev.brella.amber.plugin
 
-import dev.brella.amber.common.CodeGenSettings
-import dev.brella.amber.kotlin.*
-import org.gradle.api.DefaultTask
+import dev.brella.amber.kotlin.KotlinCodeGenSettings
+import dev.brella.amber.kotlin.KotlinStringWriter
+import dev.brella.amber.kotlin.import
+import dev.brella.amber.kotlin.`package`
 import org.gradle.api.Project
-import org.gradle.api.Task
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.*
-import org.gradle.configurationcache.extensions.capitalized
-import org.gradle.kotlin.dsl.*
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetContainer
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompileTool
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.kotlin.dsl.register
 import java.io.File
-import kotlin.reflect.KClass
-import kotlin.text.appendLine
 
 abstract class KotlinCodeGenTask : CodeGenTask<KotlinCodeGenSettings>(KotlinCodeGenSettings::class.java) {
     @get:Input
@@ -32,8 +29,8 @@ abstract class KotlinCodeGenTask : CodeGenTask<KotlinCodeGenSettings>(KotlinCode
     @get:Internal
     abstract val generator: Property<KotlinStringWriter.() -> Unit>
 
-    public fun generate(version: Long, generator: KotlinStringWriter.() -> Unit): KotlinCodeGenTask {
-        this.version.set(version)
+    public fun generate(version: Long? = null, generator: KotlinStringWriter.() -> Unit): KotlinCodeGenTask {
+        this.version.set(version ?: generator.hashCode().toLong())
         this.generator.set(generator)
 
         return this
@@ -65,10 +62,12 @@ abstract class KotlinCodeGenTask : CodeGenTask<KotlinCodeGenSettings>(KotlinCode
     }
 }
 
-fun Project.registerKotlinCodeGenTask(
+inline fun CodeGenerationContainer.registerKotlinCodeGenTask(
     name: String,
-    sourceSet: SourceDirectorySet,
-    configure: KotlinCodeGenTask.() -> Unit,
+    crossinline configure: KotlinCodeGenTask.() -> Unit,
 ): TaskProvider<KotlinCodeGenTask> =
-    tasks.register(name, configure)
-        .also(sourceSet::srcDir)
+    register<KotlinCodeGenTask>(name) {
+        outputDirectory.convention(this@registerKotlinCodeGenTask.output)
+
+        configure()
+    }

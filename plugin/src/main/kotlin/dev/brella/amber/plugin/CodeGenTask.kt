@@ -11,7 +11,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.create
 import java.io.File
 
-abstract class CodeGenTask<T: CodeGenSettings>(private val settingsClass: Class<T>) : DefaultTask() {
+abstract class CodeGenTask<in T: CodeGenSettings>(private val settingsClass: Class<T>) : DefaultTask() {
     @get:Input
     abstract val version: Property<Long>
 

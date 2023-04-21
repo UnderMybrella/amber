@@ -63,6 +63,7 @@ kotlin {
         all {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
+                enableLanguageFeature("ContextReceivers")
                 explicitApi()
             }
         }
@@ -72,6 +73,5 @@ kotlin {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-//        freeCompilerArgs += listOf("-Xcontext-receivers")
     }
 }
