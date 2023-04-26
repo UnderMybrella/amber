@@ -15,46 +15,83 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
 import java.io.File
 
-abstract class KotlinCodeGenTask : CodeGenTask<KotlinCodeGenSettings>(KotlinCodeGenSettings::class.java) {
+abstract class KotlinCodeGenTask<T> : CodeGenTask<KotlinCodeGenSettings, T>(KotlinCodeGenSettings::class.java) {
     @get:Input
-    abstract val fileName: Property<String>
-
-    @get:Input
-    abstract val filePackage: Property<String>
-
-    @get:Input
-    @get:Optional
-    abstract val imports: ListProperty<String>
+    abstract val fileNameVersion: Property<Long>
 
     @get:Internal
-    abstract val generator: Property<KotlinStringWriter.() -> Unit>
+    abstract val fileName: Property<(T) -> String>
 
-    public fun generate(version: Long? = null, generator: KotlinStringWriter.() -> Unit): KotlinCodeGenTask {
+    @get:Input
+    abstract val filePackageVersion: Property<Long>
+
+    @get:Internal
+    abstract val filePackage: Property<(T) -> String>
+
+    @get:Internal
+    abstract val generator: Property<KotlinStringWriter.(T) -> Unit>
+
+    public fun fileName(name: String): KotlinCodeGenTask<T> {
+        this.fileNameVersion.set(name.hashCode().toLong())
+        this.fileName.set { name }
+
+        return this
+    }
+
+    public fun fileName(version: Long? = null, fileName: (T) -> String): KotlinCodeGenTask<T> {
+        this.fileNameVersion.set(version ?: fileNameVersion.hashCode().toLong())
+        this.fileName.set(fileName)
+
+        return this
+    }
+
+    public fun filePackage(name: String): KotlinCodeGenTask<T> {
+        this.filePackageVersion.set(name.hashCode().toLong())
+        this.filePackage.set { name }
+
+        return this
+    }
+
+    public fun filePackage(version: Long? = null, filePackage: (T) -> String): KotlinCodeGenTask<T> {
+        this.filePackageVersion.set(version ?: filePackageVersion.hashCode().toLong())
+        this.filePackage.set(filePackage)
+
+        return this
+    }
+
+    public fun generate(version: Long? = null, generator: KotlinStringWriter.(T) -> Unit): KotlinCodeGenTask<T> {
         this.version.set(version ?: generator.hashCode().toLong())
         this.generator.set(generator)
 
         return this
     }
 
-    override fun outputFile(): File {
+    public fun generate(
+        filePackage: String,
+        fileName: String,
+        version: Long? = null,
+        generator: KotlinStringWriter.(T) -> Unit,
+    ): KotlinCodeGenTask<T> =
+        filePackage(filePackage)
+            .fileName(fileName)
+            .generate(version, generator)
+
+    override fun outputFile(data: T): File {
         val sourceDir = this.outputDirectory.asFile.get()
 
-        val filePackage = this.filePackage.get()
-        val fileName = this.fileName.get()
+        val filePackage = this.filePackage.get()(data)
+        val fileName = this.fileName.get()(data)
         val outputDir = File(sourceDir, filePackage.replace('.', '/'))
         outputDir.mkdirs()
 
         return File(outputDir, "${fileName}.kt")
     }
 
-    override fun generate(output: Appendable, settings: KotlinCodeGenSettings): Unit =
+    override fun generate(output: Appendable, settings: KotlinCodeGenSettings, data: T): Unit =
         with(KotlinStringWriter(output, settings)) {
-            `package`(filePackage.get()).appendLine()
+            `package`(filePackage.get()(data)).appendLine()
 
-            imports.orNull?.forEach(this::import)
-            appendLine()
-
-            generator.get()()
+            generator.get()(data)
         }
 
     init {
@@ -62,11 +99,11 @@ abstract class KotlinCodeGenTask : CodeGenTask<KotlinCodeGenSettings>(KotlinCode
     }
 }
 
-inline fun CodeGenerationContainer.registerKotlinCodeGenTask(
+inline fun <T> CodeGenerationContainer.registerKotlinCodeGenTask(
     name: String,
-    crossinline configure: KotlinCodeGenTask.() -> Unit,
-): TaskProvider<KotlinCodeGenTask> =
-    register<KotlinCodeGenTask>(name) {
+    crossinline configure: KotlinCodeGenTask<T>.() -> Unit,
+): TaskProvider<KotlinCodeGenTask<T>> =
+    register<KotlinCodeGenTask<T>>(name) {
         outputDirectory.convention(this@registerKotlinCodeGenTask.output)
 
         configure()

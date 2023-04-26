@@ -1,6 +1,12 @@
 import dev.brella.kornea.gradle.defineVersions
 import dev.brella.kornea.gradle.mavenBrella
 
+buildscript {
+    repositories {
+        maven(url = "https://maven.brella.dev")
+    }
+}
+
 plugins {
     kotlin("multiplatform") version "1.8.10" apply false
     kotlin("jvm") version "1.8.10" apply false
@@ -9,6 +15,8 @@ plugins {
     id("com.gradle.plugin-publish") version "1.2.0" apply false
 
     id("dev.brella.kornea") version "2.1.0"
+    id("dev.brella.amber") version "0.1.2"
+    id("com.diffplug.spotless") version "6.18.0" apply false
 }
 
 allprojects {
