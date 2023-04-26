@@ -3,7 +3,7 @@ name: gradle_push
 on:
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   docker:
