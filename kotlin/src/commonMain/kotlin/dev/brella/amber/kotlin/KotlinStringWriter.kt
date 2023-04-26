@@ -1,17 +1,16 @@
 package dev.brella.amber.kotlin
 
 import dev.brella.amber.common.appendLine
-import dev.brella.amber.kotlin.string.classes.KotlinTypeParameterAppendable
-import dev.brella.amber.kotlin.string.classes.typeParameters
-import dev.brella.amber.kotlin.string.modifiers.KotlinModifierAppendable
+import dev.brella.amber.kotlin.string.parser.classes.KotlinTypeParameterAppendable
+import dev.brella.amber.kotlin.string.parser.classes.members.KotlinFunctionDeclarationAppendable
+import dev.brella.amber.kotlin.string.parser.modifiers.KotlinModifierAppendable
 
 @KotlinStringDsl
 public open class KotlinStringWriter(
     private val base: Appendable,
     public override val settings: KotlinCodeGenSettings,
-) :
-    KotlinAppendable<KotlinStringWriter>, KotlinModifierAppendable<KotlinStringWriter>,
-    KotlinTypeParameterAppendable<KotlinStringWriter> {
+) : KotlinAppendable<KotlinStringWriter>, KotlinModifierAppendable<KotlinStringWriter>,
+    KotlinTypeParameterAppendable<KotlinStringWriter>, KotlinFunctionDeclarationAppendable<KotlinStringWriter> {
     public companion object {
         public const val ABSTRACT: String = "abstract"
         public const val ANNOTATION: String = "annotation"
@@ -43,9 +42,6 @@ public open class KotlinStringWriter(
         base.append(value, startIndex, endIndex)
         return this
     }
-
-    override fun appendSuspend(): KotlinStringWriter =
-        appendAutoSpaced("suspend")
 
     public fun appendIndent(level: Int = 0): KotlinStringWriter {
         repeat(indentLevel + level) { append(settings.indent) }

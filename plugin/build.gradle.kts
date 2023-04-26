@@ -1,3 +1,4 @@
+import dev.brella.kornea.gradle.mavenBrella
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val enableDokka = project.property("enableDokka").toString().toBoolean()
@@ -10,7 +11,7 @@ plugins {
     `kotlin-dsl`
 }
 
-version = "0.1.1"
+version = "0.1.2"
 
 if (enableDokka) {
     java {
@@ -33,7 +34,7 @@ tasks.withType<KotlinCompile> {
 repositories {
     mavenCentral()
     gradlePluginPortal()
-    mavenLocal()
+    mavenBrella()
 }
 
 dependencies {

@@ -1,16 +1,9 @@
-import dev.brella.kornea.gradle.korneaBaseModule
-import dev.brella.kornea.gradle.kotlinSourceSet
-import dev.brella.kornea.gradle.versioned
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
-
 plugins {
     kotlin("multiplatform")
 }
 
 group = "dev.brella"
-version = "1.0.0"
+version = "1.1.0"
 
 repositories {
     mavenCentral()

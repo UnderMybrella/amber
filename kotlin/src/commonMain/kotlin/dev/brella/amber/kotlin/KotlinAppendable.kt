@@ -9,11 +9,17 @@ public interface KotlinAppendable<SELF : KotlinAppendable<SELF>> : SelfAppendabl
     public fun appendAutoSpaced(value: Char): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(value).append(it) }
 
+    public fun appendAutoSpacedPrefixed(value: Char): SELF =
+        settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value) }
+
     public fun appendAutoSpacedSurround(value: Char): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value).append(it) }
 
     public fun appendAutoSpaced(value: CharSequence?): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(value).append(it) }
+
+    public fun appendAutoSpacedPrefixed(value: CharSequence?): SELF =
+        settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value) }
 
     public fun appendAutoSpacedSurround(value: CharSequence?): SELF =
         settings.autoSpacer.let { if (it == null) append(value) else append(it).append(value).append(it) }
@@ -22,7 +28,8 @@ public interface KotlinAppendable<SELF : KotlinAppendable<SELF>> : SelfAppendabl
         settings.autoSeparator.let { if (it == null) append(value) else append(value).append(it) }
 }
 
-public inline fun <SELF : KotlinAppendable<SELF>> SELF.appendAutoSpaced(block: SELF.() -> Unit): SELF =
+@KotlinStringDsl
+public inline fun <SELF : KotlinAppendable<*>> SELF.appendAutoSpaced(block: SELF.() -> Unit): SELF =
     settings.autoSpacer.let { autoSpacer ->
         try {
             this.block()
@@ -32,7 +39,8 @@ public inline fun <SELF : KotlinAppendable<SELF>> SELF.appendAutoSpaced(block: S
         }
     }
 
-public inline fun <SELF : KotlinAppendable<SELF>> SELF.appendAutoSeparated(block: SELF.() -> Unit): SELF =
+@KotlinStringDsl
+public inline fun <SELF : KotlinAppendable<*>> SELF.appendAutoSeparated(block: SELF.() -> Unit): SELF =
     settings.autoSeparator.let { autoSeparator ->
         try {
             this.block()

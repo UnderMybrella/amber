@@ -1,10 +1,3 @@
-import dev.brella.kornea.gradle.korneaBaseModule
-import dev.brella.kornea.gradle.kotlinSourceSet
-import dev.brella.kornea.gradle.versioned
-import org.gradle.jvm.tasks.Jar
-import org.jetbrains.kotlin.gradle.dsl.KotlinCommonCompile
-import org.jetbrains.kotlin.gradle.dsl.KotlinCompile
-
 plugins {
     kotlin("multiplatform")
 }
@@ -19,7 +12,6 @@ repositories {
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-//        freeCompilerArgs += listOf("-Xcontext-receivers")
     }
 }
 
