@@ -14,8 +14,10 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.register
 import java.io.File
+import javax.inject.Inject
 
-abstract class KotlinCodeGenTask<T> : CodeGenTask<KotlinCodeGenSettings, T>(KotlinCodeGenSettings::class.java) {
+abstract class KotlinCodeGenTask<T> @Inject constructor(dataClass: Class<T>) :
+    CodeGenTask<KotlinCodeGenSettings, T>(KotlinCodeGenSettings::class.java, dataClass) {
     @get:Input
     abstract val fileNameVersion: Property<Long>
 
@@ -99,11 +101,11 @@ abstract class KotlinCodeGenTask<T> : CodeGenTask<KotlinCodeGenSettings, T>(Kotl
     }
 }
 
-inline fun <T> CodeGenerationContainer.registerKotlinCodeGenTask(
+inline fun <reified T : Any> CodeGenerationContainer.registerKotlinCodeGenTask(
     name: String,
     crossinline configure: KotlinCodeGenTask<T>.() -> Unit,
 ): TaskProvider<KotlinCodeGenTask<T>> =
-    register<KotlinCodeGenTask<T>>(name) {
+    register<KotlinCodeGenTask<T>>(name, T::class.java) {
         outputDirectory.convention(this@registerKotlinCodeGenTask.output)
 
         configure()

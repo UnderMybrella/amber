@@ -4,6 +4,7 @@ import dev.brella.kornea.gradle.mavenBrella
 buildscript {
     repositories {
         maven(url = "https://maven.brella.dev")
+        mavenLocal()
     }
 }
 
@@ -15,7 +16,7 @@ plugins {
     id("com.gradle.plugin-publish") version "1.2.0" apply false
 
     id("dev.brella.kornea") version "2.1.0"
-    id("dev.brella.amber") version "0.1.2"
+    id("dev.brella.amber") version "0.2.0"
     id("com.diffplug.spotless") version "6.18.0" apply false
 }
 
@@ -42,7 +43,7 @@ configure(subprojects) {
 
 defineVersions {
     ktor("2.2.4")
-    korneaBase("1.2.0-alpha")
+    korneaBase("1.3.0-alpha")
     korneaErrors("4.0.1-alpha")
 
     "kotest" .. "5.5.5"

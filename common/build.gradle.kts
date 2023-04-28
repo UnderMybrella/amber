@@ -1,3 +1,5 @@
+import dev.brella.kornea.gradle.korneaBaseModule
+
 plugins {
     kotlin("multiplatform")
 }
@@ -44,7 +46,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-//                implementation(korneaBaseModule())
+                implementation(korneaBaseModule())
             }
         }
         val commonTest by getting {
@@ -62,7 +64,7 @@ kotlin {
         all {
             languageSettings.apply {
                 optIn("kotlin.RequiresOptIn")
-                explicitApi()
+//                explicitApi()
             }
         }
     }

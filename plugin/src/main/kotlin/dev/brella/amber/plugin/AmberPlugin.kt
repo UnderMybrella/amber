@@ -11,7 +11,7 @@ class AmberPlugin : Plugin<Project> {
 
         val selfKotlin = hierarchy.foldExtensions<KotlinCodeGenSettingsGradle>(null) { child, parent -> child convention parent }
 
-        target.tasks.withType<KotlinCodeGenTask> {
+        target.tasks.withType<KotlinCodeGenTask<*>> {
             extensions.getOrCreate<KotlinCodeGenSettingsGradle>(
                 //This is a workaround for gradle#18213 (https://github.com/gradle/gradle/issues/18213) that causes properties to fail on some extension aware objects
                 args = arrayOf(target.objects)

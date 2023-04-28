@@ -1,0 +1,4 @@
+{
+  "ISNULL": ["IsNull", "isNull"],
+  "NOTNULL": ["NotNull", "notNull"]
+}
