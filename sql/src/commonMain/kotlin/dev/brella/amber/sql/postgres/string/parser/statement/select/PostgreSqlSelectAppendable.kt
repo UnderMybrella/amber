@@ -10,4 +10,4 @@ import dev.brella.amber.sql.postgres.string.lexer.keywords.PostgreSqlStrictKeywo
 public interface PostgreSqlSelectAppendable<SELF : PostgreSqlSelectAppendable<SELF>> : PostgreSqlAppendable<SELF>,
     PostgreSqlParenthesisGroupAppendable<SELF>, PostgreSqlSelectKeywordAppendable<SELF>,
     PostgreSqlAllKeywordAppendable<SELF>, PostgreSqlIntoKeywordAppendable<SELF>,
-    PostgreSqlStrictKeywordAppendable<SELF>,
+    PostgreSqlStrictKeywordAppendable<SELF>
